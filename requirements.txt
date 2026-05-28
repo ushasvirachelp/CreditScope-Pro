@@ -1,0 +1,12 @@
+numpy
+pandas
+duckdb
+jupyter
+matplotlib
+scikit-learn
+xgboost
+shap
+fastapi
+uvicorn
+streamlit
+python-dotenv
