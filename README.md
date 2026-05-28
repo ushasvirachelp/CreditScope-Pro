@@ -85,7 +85,7 @@ creditscope-pro/
 ├── README.md
 └── .gitignore
 
-Data Architecture
+## Data Architecture
 
 CreditScope Pro uses a relational DuckDB architecture with the following main tables:
 
