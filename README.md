@@ -186,55 +186,19 @@ streamlit run src/dashboard/app.py
 
 ---
 
-## How to Run the Project
+## Demo and Access
 
-### 1. Create and activate a virtual environment
+CreditScope Pro is currently maintained as a portfolio-grade prototype and product concept.
 
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-```
+The repository includes the core application structure, data generation modules, modeling scripts, and dashboard code. The generated DuckDB database and synthetic data outputs are intentionally excluded from version control.
 
-### 2. Install dependencies
+For review purposes, the dashboard screenshots below show the current working prototype. The project can be demonstrated locally upon request.
 
-```bash
-pip install -r requirements.txt
-```
+### Local Development Note
 
-### 3. Build the DuckDB database
+The application is designed to run locally with Python, DuckDB, and Streamlit. Full reproduction requires generating the synthetic portfolio, rebuilding the DuckDB database, creating the modeling dataset, and launching the dashboard.
 
-```bash
-python src/database/build_duckdb.py
-```
-
-### 4. Generate synthetic data
-
-```bash
-python src/data_generation/generate_customers.py
-python src/data_generation/generate_accounts.py
-python src/data_generation/generate_macro.py
-python src/data_generation/generate_policy_scenarios.py
-python src/data_generation/generate_behavior.py
-python src/data_generation/generate_payment_events.py
-python src/data_generation/generate_bureau_monthly.py
-```
-
-### 5. Create modeling dataset and train model
-
-```bash
-python src/models/create_modeling_dataset.py
-python src/models/train_logistic_model.py
-python src/models/score_model_audit.py
-python src/models/portfolio_summary.py
-```
-
-### 6. Launch dashboard
-
-```bash
-streamlit run src/dashboard/app.py
-```
-
----
+A more deployment-ready version with packaged setup scripts, API endpoints, and hosted dashboard access is planned for future iterations.
 
 ## Example Insights
 
