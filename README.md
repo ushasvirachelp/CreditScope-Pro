@@ -151,6 +151,31 @@ The model outputs:
 * model audit records for governance tracking
 
 ---
+## Demo and Access
+
+CreditScope Pro is currently maintained as a portfolio-grade prototype and product concept.
+
+The repository includes the core application structure, data generation modules, modeling scripts, and dashboard code. The generated DuckDB database and synthetic data outputs are intentionally excluded from version control.
+
+For review purposes, the dashboard screenshots below show the current working prototype. The project can be demonstrated locally upon request.
+
+### Local Development Note
+
+The application is designed to run locally with Python, DuckDB, and Streamlit. Full reproduction requires generating the synthetic portfolio, rebuilding the DuckDB database, creating the modeling dataset, and launching the dashboard.
+
+A more deployment-ready version with packaged setup scripts, API endpoints, and hosted dashboard access is planned for future iterations.
+
+## Example Insights
+
+CreditScope Pro can show insights such as:
+
+* severe credit stress increases default and charge-off rates compared with baseline
+* high-risk model bands have meaningfully higher actual default concentration
+* payment delays increase under stress scenarios
+* accounts with lower FICO and higher utilization are more likely to fall into critical risk bands
+* product-level risk differs across credit cards, auto loans, personal loans, and student refinance products
+
+---
 
 ## Dashboard
 
@@ -186,31 +211,6 @@ streamlit run src/dashboard/app.py
 
 ---
 
-## Demo and Access
-
-CreditScope Pro is currently maintained as a portfolio-grade prototype and product concept.
-
-The repository includes the core application structure, data generation modules, modeling scripts, and dashboard code. The generated DuckDB database and synthetic data outputs are intentionally excluded from version control.
-
-For review purposes, the dashboard screenshots below show the current working prototype. The project can be demonstrated locally upon request.
-
-### Local Development Note
-
-The application is designed to run locally with Python, DuckDB, and Streamlit. Full reproduction requires generating the synthetic portfolio, rebuilding the DuckDB database, creating the modeling dataset, and launching the dashboard.
-
-A more deployment-ready version with packaged setup scripts, API endpoints, and hosted dashboard access is planned for future iterations.
-
-## Example Insights
-
-CreditScope Pro can show insights such as:
-
-* severe credit stress increases default and charge-off rates compared with baseline
-* high-risk model bands have meaningfully higher actual default concentration
-* payment delays increase under stress scenarios
-* accounts with lower FICO and higher utilization are more likely to fall into critical risk bands
-* product-level risk differs across credit cards, auto loans, personal loans, and student refinance products
-
----
 
 ## Future Improvements
 
