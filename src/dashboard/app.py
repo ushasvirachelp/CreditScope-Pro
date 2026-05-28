@@ -445,7 +445,11 @@ high_risk_accounts = run_query(f"""
         ROUND(m.utilization_rate, 4) AS utilization_rate,
         ROUND(m.fico_score, 1) AS fico_score,
         ROUND(m.cashflow_stress_score, 4) AS cashflow_stress_score,
-        ROUND(m.behavioral_risk_score, 4) AS behavioral_risk_score
+        ROUND(m.behavioral_risk_score, 4) AS behavioral_risk_score,
+        msa.top_shap_feature_1,
+        ROUND(msa.top_shap_value_1, 4) AS top_shap_value_1,
+        msa.top_shap_feature_2,
+        ROUND(msa.top_shap_value_2, 4) AS top_shap_value_2
     FROM model_scoring_audit msa
     JOIN modeling_dataset m
         ON msa.account_month_id = m.account_month_id
