@@ -23,6 +23,67 @@ def run_query(query: str) -> pd.DataFrame:
         return conn.execute(query).fetchdf()
 
 
+def clean_feature_name(feature_name) -> str:
+    """Convert pipeline feature names into readable dashboard labels."""
+    if pd.isna(feature_name):
+        return "Not explained yet"
+
+    feature_name = str(feature_name)
+
+    readable_names = {
+        "num__fico_score": "FICO Score",
+        "num__credit_utilization": "Credit Utilization",
+        "num__delinquencies_12m": "Delinquencies in Last 12 Months",
+        "num__utilization_rate": "Account Utilization Rate",
+        "num__cashflow_stress_score": "Cashflow Stress Score",
+        "num__behavioral_risk_score": "Behavioral Risk Score",
+        "num__days_past_due": "Days Past Due",
+        "num__baseline_fico": "Baseline FICO",
+        "num__baseline_dti": "Baseline DTI",
+        "num__interest_rate": "Interest Rate",
+        "num__total_debt_balance": "Total Debt Balance",
+        "num__employment_stability_score": "Employment Stability Score",
+        "num__current_balance": "Current Balance",
+        "num__available_credit": "Available Credit",
+        "num__minimum_payment_due": "Minimum Payment Due",
+        "num__actual_payment_amount": "Actual Payment Amount",
+        "num__macro_stress_score": "Macro Stress Score",
+        "num__credit_limit": "Credit Limit",
+        "num__origination_fico": "Origination FICO",
+        "num__origination_income": "Origination Income",
+        "num__origination_dti": "Origination DTI",
+        "num__annual_income": "Annual Income",
+        "num__monthly_income": "Monthly Income",
+        "num__baseline_financial_resilience": "Financial Resilience Score",
+        "num__total_credit_limit": "Total Credit Limit",
+        "num__num_open_accounts": "Number of Open Accounts",
+        "num__num_recent_inquiries": "Recent Credit Inquiries",
+        "cat__product_type_credit_card": "Product: Credit Card",
+        "cat__product_type_personal_loan": "Product: Personal Loan",
+        "cat__product_type_auto_loan": "Product: Auto Loan",
+        "cat__product_type_student_refi": "Product: Student Refinance",
+        "cat__risk_tier_at_origination_prime": "Risk Tier: Prime",
+        "cat__risk_tier_at_origination_near_prime": "Risk Tier: Near Prime",
+        "cat__risk_tier_at_origination_subprime": "Risk Tier: Subprime",
+        "cat__risk_tier_at_origination_deep_subprime": "Risk Tier: Deep Subprime",
+        "cat__income_band_low": "Income Band: Low",
+        "cat__income_band_middle": "Income Band: Middle",
+        "cat__income_band_upper_middle": "Income Band: Upper Middle",
+        "cat__income_band_high": "Income Band: High",
+    }
+
+    if feature_name in readable_names:
+        return readable_names[feature_name]
+
+    return (
+        feature_name
+        .replace("num__", "")
+        .replace("cat__", "")
+        .replace("_", " ")
+        .title()
+    )
+
+
 st.set_page_config(
     page_title="CreditScope Pro",
     page_icon="💳",
@@ -161,6 +222,10 @@ st.info(
 
 st.divider()
 
+# -----------------------------
+# Executive Takeaways
+# -----------------------------
+
 st.subheader("Executive Takeaways")
 
 takeaway_default_rate = selected_metrics["selected_default_rate"].iloc[0]
@@ -185,6 +250,10 @@ st.markdown(
     - **Interpretation:** Higher stress, utilization, and lower FICO scores are associated with higher model-predicted default risk.
     """
 )
+
+# -----------------------------
+# Portfolio Composition
+# -----------------------------
 
 st.subheader("Portfolio Composition")
 
@@ -269,6 +338,10 @@ chart_data = scenario_risk.set_index("scenario_id")[
 st.bar_chart(chart_data)
 
 st.divider()
+
+# -----------------------------
+# Monthly Default Trend
+# -----------------------------
 
 st.subheader("Monthly Default Trend")
 
@@ -391,6 +464,10 @@ if not risk_band_validation.empty:
     ]
     st.bar_chart(risk_chart)
 
+# -----------------------------
+# Risk Band Distribution
+# -----------------------------
+
 st.subheader("Risk Band Distribution")
 
 risk_distribution_product_filter = ""
@@ -423,6 +500,10 @@ if not risk_band_distribution.empty:
     st.bar_chart(risk_band_distribution.set_index("risk_band"))
 
 st.divider()
+
+# -----------------------------
+# High-Risk Account Spotlight
+# -----------------------------
 
 st.subheader("High-Risk Account Spotlight")
 
@@ -460,7 +541,39 @@ high_risk_accounts = run_query(f"""
     LIMIT 25
 """)
 
+if not high_risk_accounts.empty:
+    high_risk_accounts["top_shap_feature_1"] = high_risk_accounts[
+        "top_shap_feature_1"
+    ].apply(clean_feature_name)
+
+    high_risk_accounts["top_shap_feature_2"] = high_risk_accounts[
+        "top_shap_feature_2"
+    ].apply(clean_feature_name)
+
+    high_risk_accounts = high_risk_accounts.rename(
+        columns={
+            "account_id": "Account ID",
+            "customer_id": "Customer ID",
+            "product_type": "Product",
+            "risk_band": "Risk Band",
+            "predicted_pd": "Predicted PD",
+            "default_flag": "Actual Default",
+            "utilization_rate": "Utilization Rate",
+            "fico_score": "FICO Score",
+            "cashflow_stress_score": "Cashflow Stress Score",
+            "behavioral_risk_score": "Behavioral Risk Score",
+            "top_shap_feature_1": "Top Driver 1",
+            "top_shap_value_1": "Top Driver 1 SHAP Value",
+            "top_shap_feature_2": "Top Driver 2",
+            "top_shap_value_2": "Top Driver 2 SHAP Value",
+        }
+    )
+
 st.dataframe(high_risk_accounts, use_container_width=True)
+
+# -----------------------------
+# Product Risk
+# -----------------------------
 
 st.subheader("Product-Level Baseline Risk")
 
